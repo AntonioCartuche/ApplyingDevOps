@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AgroServicios!</title>
+    <link rel="icon" href='{% static  "images/loguito.png" %}'>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+        type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href='{% static  "css/bootstrap.min.css" %}'>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href='{% static "css/font-awesome.min.css" %}'>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href='{% static "css/owl.carousel.css" %}'>
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <link rel="stylesheet" href='{% static "css/responsive.css" %}'>
+
+
+</head>
+
+<body>
+
+    <div class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="user-menu">
+                        <ul>
+                            <li><a href="{% url 'pagPrincipal' %}"><i class="fa fa-user"></i> Mi Cuenta</a></li>
+                            <li><a href=" {% url 'carrito' %} "><i class="fa fa-shopping-cart"></i> Mi Carrito</a></li>
+                            <li><a href=" {% url 'pagVerificar' %} "><i class="fa fa-cc-visa"></i> Pagos</a></li>
+
+                            <!-- Usuario valida -->
+                            {% if user.username %}
+                            <li class="dropdown">
+                                <span style="color: #5ACA76;" class="dropdown-toggle" data-toggle="dropdown"><i
+                                        class=" fa fa-user " data-toggle="dropdown"></i>
+                                    {{user.username | upper }}
+                                    <b class="caret"></b>
+                                </span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                                    {% if user.username == 'admin' %}
+                                    <li><a href="{% url 'registrarProducto' %}">Registrar Producto</a></li>
+                                    <li><a href="{% url 'listadoProductos' %}">Listado de productos</a></li>
+                                    {% endif%}
+
+                                </ul>
+
+                            </li>
+                            {% else %}
+                            <li><a href="{% url 'login' %}"><i class="fa fa-user"></i> Iniciar Sesion</a></li>
+                            <li><a href="{% url 'registrar' %}"><i class="fa fa-user"></i> Registrarse</a></li>
+                            {% endif%}
+
+
+
+                        </ul>
+                    </div>
+                </div>
+                <!--
+                <div class="col-md-4">
+                    <div class="header-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
+                                        class="key">Moneda : </span><span class="value"> USD </span><b
+                                        class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">USD</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
+                                        class="key">Lenguaje : </span><span class="value"> Español </span><b
+                                        class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Español</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div> <!-- End header area -->
+
+    <div class="site-branding-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="logo">
+                        <h1><a href=" {% url 'pagPrincipal' %} "><img src='{% static  "images/logo.png" %}'></a></h1>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="shopping-item">
+                        <a href=" {% url 'carrito' %} ">Carrito - <span class="cart-amunt">$ {{total_carrito}}</span> <i
+                                class="fa fa-shopping-cart"></i> <span class="product-count">{{total_items}}</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End site branding area -->
+
+    <div class="mainmenu-area">
+        <div class="container">
+            <div class="row">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href=" {% url 'pagPrincipal' %} ">Inicio</a></li>
+                        <li><a href=" {% url 'pagServicios' %} ">Categoria</a></li> <!-- Servicios -->
+                        <li><a href=" {% url 'contactos' %} ">Contactos</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End mainmenu area -->
+
+    <div class="slider-area">
+        <!-- Slider -->
+        <div class="block-slider block-slider4">
+            <ul class="" id="bxslider-home4">
+                <li>
+                    <img src='{% static "images/slide1.jfif" %}' alt="Slide">
+                    <div class="caption-group">
+                        <h2 class="caption title">
+                            NOSOTROS <span class="primary"> <strong></strong></span>
+                        </h2>
+                        <h2 class="caption title">
+                            <span class="primary"> <strong> CUIDAMOS DE SU PRODUCCION</strong></span>
+                        </h2>
+                    </div>
+                </li>
+                <li><img src='{% static "images/slide2.jfif" %}' alt="Slide">
+                    <div class="caption-group">
+                        <center>
+                            <h2 class="caption title">
+                                HASTA UN
+                            </h2>
+                            <h2 class="caption title">
+                                <span class="primary">20% <strong>DE DESCUENTO</strong></span>
+                            </h2>
+                            <h4 class="caption subtitle">EN NUESTROS PRODUCTOS</h4>
+                        </center>
+                    </div>
+                </li>
+                <li><img src='{% static "images/slide3.jfif" %}' alt="Slide">
+                    <div class="caption-group">
+                        <h2 class="caption title">
+                            TE BRINDAMOS <span class="primary"> <strong> </strong></span>
+                        </h2>
+                        <h2 class="caption title">
+                            <span class="primary"> <strong>ACESORIA PROFESIONAL</strong></span>
+                        </h2>
+                    </div>
+                </li>
+                <li><img src='{% static "images/slide4.jfif" %}' alt="Slide">
+                    <div class="caption-group">
+
+                        <h2 class="caption title">
+                            AMPLIO STOCK <span class="primary"> <strong> </strong></span>
+                        </h2>
+                        <h2 class="caption title">
+                            <span class="primary"> <strong>EN PRODUCTOS VETERINARIOS</strong></span>
+                        </h2>
+                        S
+
+                    </div>
+                </li>
+
+
+            </ul>
+        </div>
+        <!-- ./Slider -->
+    </div> <!-- End slider area -->
+
+
+
+
+    <div class="single-prssaoduct-area">
+        <div class="container">
+            <div class="row">
+                <div class="latest-product">
+                    <br><br><br><br><br>
+                    <h2 class="section-title">PRODUCTOS</h2>
+                </div>
+
+                {% for producto in productos %}
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-shop-product">
+                        <center>
+                            <div class="product-upper">
+                                <a class="btn add_to_cart_button  btn-block" href=" {% url 'pagPrincipal' %}  ">
+                                    <strong>
+                                        {{producto.nombre | upper}}
+                                    </strong>
+                                </a>
+                            </div>
+                            <div class="single-product">
+                                <div class="product-f-image">
+                                    {% if producto.imagen.url != null %}
+                                    <img src="{{producto.imagen.url}}" width="260px" height="300px" alt="">
+                                    {% else %}
+                                    <img src='{% static  "img/img_no_disponible.png" %}' width="260px" height="300px"
+                                        alt="">
+                                    {% endif %}
+                                    <div class="product-hover">
+                                        {% if user.username %}
+                                        <a href="{% url 'Add' producto.id %}" class="add-to-cart-link"><i
+                                                class="fa fa-shopping-cart"></i>Añadir al carrito</a>
+                                        {% else %}
+                                        <a href="{% url 'login' %}" class="add-to-cart-link"><i
+                                                class="fa fa-shopping-cart"></i>Añadir al carrito</a>
+                                        {% endif %}
+
+                                        <a href=" {% url 'detalle' producto.id%}" class="view-details-link"><i
+                                                class="fa fa-link"></i> Ver detalles</a>
+                                    </div>
+                                </div>
+                                <div class="product-carousel-price">
+                                    <ins> <strong>$ {{producto.precio}}</strong></ins>
+                                </div>
+                                <div class="product-option-shop">
+                                    <h5>{{producto.descripcion}}</h5>
+                                </div>
+
+                            </div>
+                        </center>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div><!-- End Productos area -->
+
+    <div class="maincontent-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="latest-product">
+                        <h2 class="section-title">Ultimos Productos</h2>
+                        <div class="product-carousel">
+                            {% for producto in productos %}
+                            <center>
+                                <div class="single-product">
+                                    <div class="product-f-image">
+                                        {% if producto.imagen.url != null %}
+                                        <a href=" {% url 'pagPrincipal' %} "><img src="{{producto.imagen.url}}"
+                                                width="260px" height="300px" alt=""></a>
+                                        {% else %}
+                                        <img src='{% static  "img/img_no_disponible.png" %}' width="260px"
+                                            height="300px" alt="">
+                                        {% endif %}
+                                    </div>
+                                    <div class="product-upper">
+                                        <a class="btn add_to_cart_button  btn-block" href=" {% url 'pagPrincipal' %}  ">
+                                            <strong>
+                                                {{producto.nombre | upper}}
+                                            </strong>
+                                        </a>
+                                    </div>
+
+                                    <div class="product-carousel-price">
+                                        <ins> $ {{producto.precio}}</ins>
+                                    </div>
+                                </div>
+                            </center>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End main content area -->
+
+
+    <!-- Start Final area -->
+    <div class="footer-top-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="footer-about-us">
+                        <h2>Agro<span>Servicios</span></h2>
+                        <p> Es una empresa de productos agricolas y de veterinaria al servicio de la comunidad Lojana.
+                        </p>
+                        <div class="footer-social">
+                            <a href=" {% url 'pagPrincipal' %}" target="_blank"><i class="fa fa-facebook"></i></a>
+                            <a href=" {% url 'pagPrincipal' %}" target="_blank"><i class="fa fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div> <!-- End footer top area -->
+
+
+
+
+    <!-- Latest jQuery form server -->
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+
+    <!-- Bootstrap JS form CDN -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!-- jQuery sticky menu -->
+    <script src='{% static "js/owl.carousel.min.js" %}'></script>
+    <script src='{% static "js/jquery.sticky.js" %}'></script>
+
+    <!-- jQuery easing -->
+    <script src='{% static "js/jquery.easing.1.3.min.js" %}'></script>
+
+    <!-- Main Script -->
+    <script src='{% static "js/main.js" %}'></script>
+
+    <!-- Slider -->
+    <script type="text/javascript" src='{% static "js/bxslider.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/script.slider.js" %}'></script>
+
+
+
+
+
+
+
+
+
+    
+    <!-- Agrega el código del modal al final del archivo -->
+    <div class="modal fade" id="notificacionModal" tabindex="-1" role="dialog" aria-labelledby="notificacionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificacionModalLabel">Recibir Actualizaciones de Productos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Quieres recibir notificaciones de nuevos productos?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No, gracias</button>
+                    <button type="button" class="btn btn-primary" onclick="aceptarNotificaciones()">Sí, por
+                        favor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ... Más código HTML de tu página principal ... -->
+
+    <!-- Agrega el script JavaScript al final del archivo -->
+    <script>
+        $(document).ready(function () {
+            // Muestra el modal solo si el usuario no ha rechazado las notificaciones previamente
+            if (!localStorage.getItem('rechazarNotificaciones')) {
+                $('#notificacionModal').modal('show');
+            }
+        });
+
+        function aceptarNotificaciones() {
+            // Guarda la preferencia del usuario para recibir notificaciones
+            // Puedes realizar una llamada AJAX aquí para actualizar las preferencias en el servidor
+            // Por ahora, solo almacenaremos la preferencia en el almacenamiento local
+            localStorage.setItem('rechazarNotificaciones', 'true');
+            // Cierra el modal
+            $('#notificacionModal').modal('hide');
+        }
+    </script>
+
+</body>
+
+</html>
