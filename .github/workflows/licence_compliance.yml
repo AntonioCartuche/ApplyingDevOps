@@ -1,0 +1,23 @@
+name: License 
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+      - master
+  pull_request:
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: License compliance check
+        uses: mikaelvesavuori/license-compliance-action@v1
+        with:
+          allow_licenses: "https://www.mockachino.com/{{MIT;ISC;0BSD;BSD-2-Clause;BSD-3-Clause;Apache-2.0}}/licenses"
+          nested_field: "licenseString"
