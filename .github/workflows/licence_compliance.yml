@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - "release/*"
+      - 'release/*'
       - master
   pull_request:
 
@@ -13,28 +13,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Paso 1: Obtener el repositorio
+      # 1. Checkout del código
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Paso 2: Validar licencias permitidas
+      # 2. Configurar entorno para Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      # 3. Instalar dependencias
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pip-licenses
+
+      # 4. Generar archivo de licencias
+      - name: Generate License Report
+        run: pip-licenses --format=json --output-file=license-results.txt
+
+      # 5. License compliance check
       - name: License Compliance Check
         uses: mikaelvesavuori/license-compliance-action@v1
         with:
           allow_licenses: "MIT;ISC;0BSD;BSD-2-Clause;BSD-3-Clause;Apache-2.0;GPL-3.0;LGPL-3.0"
           nested_field: "licenseString"
 
-      # Paso 3: Generar un reporte (opcional, para hacerlo más interesante)
-      - name: Generate License Report
-        if: failure()
-        run: |
-          echo "Una o más licencias no permitidas fueron detectadas."
-          echo "Revise las dependencias del proyecto y asegúrese de utilizar solo las licencias aceptadas."
+      # 6. Verifica si el archivo se generó
+      - name: Check License Results
+        run: cat ./license-results.txt || echo "No license results found."
 
-      # Paso 4: Publicar resultados (opcional)
-      - name: Upload License Compliance Results
+      # 7. Subir el artefacto (si existe)
+      - name: Upload License Results
         uses: actions/upload-artifact@v3
-        if: always()
         with:
-          name: license-compliance-results
-          path: ./license-results.txt # Este archivo se genera si hay un reporte adicional
+          name: license-results
+          path: ./license-results.txt
