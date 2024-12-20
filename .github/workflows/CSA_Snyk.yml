@@ -1,0 +1,45 @@
+name: Snyk
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  snyk-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Configura el repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Configura Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Cambia la versión según tu proyecto
+
+      # Instala las dependencias del proyecto
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      # Instala Snyk CLI
+      - name: Install Snyk
+        run: pip install snyk
+
+      # Autentica con Snyk
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      # Escanea las dependencias del proyecto
+      - name: Run Snyk Test
+        run: snyk test
+
+      # (Opcional) Monitorea el proyecto en Snyk
+      - name: Monitor Snyk Project
+        run: snyk monitor
