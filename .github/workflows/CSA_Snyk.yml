@@ -28,9 +28,15 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      # Instala Snyk CLI
+      # Instala Node.js (necesario para Snyk CLI)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Puedes usar la versión que prefieras
+
+      # Instala Snyk CLI con npm
       - name: Install Snyk
-        run: pip install snyk
+        run: npm install -g snyk
 
       # Autentica con Snyk
       - name: Authenticate Snyk
