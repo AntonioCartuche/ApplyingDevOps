@@ -48,4 +48,4 @@ jobs:
 
       # (Opcional) Monitorea el proyecto en Snyk
       - name: Monitor Snyk Project
-        run: snyk monitor
+        run: snyk monitor --skip-unresolved
