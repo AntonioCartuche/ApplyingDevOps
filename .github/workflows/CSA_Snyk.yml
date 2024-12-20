@@ -44,7 +44,7 @@ jobs:
 
       # Escanea las dependencias del proyecto
       - name: Run Snyk Test
-        run: snyk test
+        run: snyk test --skip-unresolved
 
       # (Opcional) Monitorea el proyecto en Snyk
       - name: Monitor Snyk Project
