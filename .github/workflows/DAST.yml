@@ -1,4 +1,4 @@
-name: OWASP ZAP DAST Scan
+name: DAST
 
 on:
   push:
@@ -12,11 +12,6 @@ jobs:
   owasp-zap:
     runs-on: ubuntu-latest
 
-    services:
-      zap:
-        image: owasp/zap2docker-stable
-        options: --privileged --network host
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,13 +21,18 @@ jobs:
         with:
           java-version: '11'
 
+      - name: Install OWASP ZAP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zaproxy
+
       - name: Start ZAP
         run: |
-          docker pull owasp/zap2docker-stable
-          docker run -d -p 8080:8080 owasp/zap2docker-stable zap-api-scan.py -t https://github.com/AntonioCartuche/ApplyingDevOps.git/zap-scan-target-url
+          zap.sh -daemon -port 8080 -config api.key=${{ secrets.ZAP_API_KEY }}
 
       - name: Run OWASP ZAP API Scan
         env:
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
         run: |
-          docker run -t owasp/zap2docker-stable zap-api-scan.py -t https://github.com/AntonioCartuche/ApplyingDevOps.git/zap-scan-target-url -f openapi -J -H zap_proxy:8080
+          curl -LO https://raw.githubusercontent.com/stevescargall/zap-scan/master/zap-api-scan.py
+          python3 zap-api-scan.py -t https://github.com/<your-repo>/zap-scan-target-url -f openapi -J -H http://localhost:8080
