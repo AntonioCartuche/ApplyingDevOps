@@ -1,4 +1,4 @@
-name: OWASP ZAP DAST Scan
+name: DAST
 
 on:
   push:
@@ -19,11 +19,18 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '11'  # Especifica la versión de Java
-          distribution: 'temurin'  # Usar Eclipse Temurin (el sucesor de AdoptOpenJDK)
+          java-version: '11'
+          distribution: 'temurin'
 
       - name: Install OWASP ZAP
         run: |
+          # Añadir el repositorio de ZAP y sus claves
+          sudo apt-get update
+          sudo apt-get install -y gnupg curl lsb-release
+          curl -fsSL https://archive.zaproxy.org/debian/zed-archive.key | sudo tee /etc/apt/trusted.gpg.d/zed-archive.asc
+          echo "deb https://archive.zaproxy.org/debian/ $(lsb_release -c | awk '{print $2}') main" | sudo tee /etc/apt/sources.list.d/owasp-zap.list
+          
+          # Instalar ZAP
           sudo apt-get update
           sudo apt-get install -y zaproxy
 
