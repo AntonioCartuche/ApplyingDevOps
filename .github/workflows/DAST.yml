@@ -13,11 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout el código
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Configura Python y dependencias
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -28,7 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 3. Configura y ejecuta Django
       - name: Setup and Run Django
         run: |
           python manage.py migrate
@@ -37,18 +34,15 @@ jobs:
           DJANGO_SETTINGS_MODULE: your_project.settings
           DEBUG: 'True'
 
-      # 4. Ejecuta OWASP ZAP para realizar el escaneo DAST
       - name: Run OWASP ZAP Scan
-        uses: zaproxy/action-full-scan@v0.9.1
+        uses: zaproxy/action-full-scan@v0.9.0
         with:
           target: "http://localhost:8000"
         env:
           JAVA_OPTS: "-Xmx512m"
 
-      # 5. Publica los resultados
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v3
         with:
           name: ZAP-Report
           path: /zap/wrk/*.html
-
