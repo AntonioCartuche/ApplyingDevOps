@@ -1,4 +1,4 @@
-name: DAST 
+name: DAST
 
 on:
   push:
@@ -40,7 +40,6 @@ jobs:
           target: "http://localhost:8000"
         env:
           JAVA_OPTS: "-Xmx512m"
-           ZAP_TOKEN: ${{ secrets.ZAP_API_KEY }}
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v3
