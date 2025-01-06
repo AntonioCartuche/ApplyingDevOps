@@ -1,4 +1,4 @@
-name: DAST
+name: DAST 
 
 on:
   push:
@@ -9,38 +9,40 @@ on:
       - main
 
 jobs:
-  owasp-zap:
+  dast-scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          python-version: "3.9"
 
-      - name: Install OWASP ZAP
+      - name: Install Dependencies
         run: |
-          # Añadir el repositorio de ZAP y sus claves
-          sudo apt-get update
-          sudo apt-get install -y gnupg curl lsb-release
-          curl -fsSL https://archive.zaproxy.org/debian/zed-archive.key | sudo tee /etc/apt/trusted.gpg.d/zed-archive.asc
-          echo "deb http://archive.zaproxy.org/debian/ jammy main $(lsb_release -c | awk '{print $2}') main" | sudo tee /etc/apt/sources.list.d/owasp-zap.list
-          
-          # Instalar ZAP
-          sudo apt-get update
-          sudo apt-get install -y zaproxy
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Start ZAP
+      - name: Setup and Run Django
         run: |
-          zap.sh -daemon -port 8080 -config api.key=${{ secrets.ZAP_API_KEY }}
-
-      - name: Run OWASP ZAP API Scan
+          python manage.py migrate
+          python manage.py runserver 0.0.0.0:8000 &
         env:
-          ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
-        run: |
-          curl -LO https://raw.githubusercontent.com/stevescargall/zap-scan/master/zap-api-scan.py
-          python3 zap-api-scan.py -t https://github.com/AntonioCartuche/ApplyingDevOps.git/zap-scan-target-url -f openapi -J -H http://localhost:8080
+          DJANGO_SETTINGS_MODULE: ProyectFinalDBP.settings
+          DEBUG: 'True'
+
+      - name: Run OWASP ZAP Scan
+        uses: zaproxy/action-full-scan@v0.9.0
+        with:
+          target: "http://localhost:8000"
+        env:
+          JAVA_OPTS: "-Xmx512m"
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: ZAP-Report
+          path: /zap/wrk/*.html
