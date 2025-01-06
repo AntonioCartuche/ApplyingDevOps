@@ -1,4 +1,4 @@
-name: DAST
+name: OWASP ZAP DAST Scan
 
 on:
   push:
@@ -19,8 +19,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
-          java-version: '11'  # Versión de Java 
-          distribution: 'openjdk'
+          java-version: '11'  # Especifica la versión de Java
+          distribution: 'temurin'  # Usar Eclipse Temurin (el sucesor de AdoptOpenJDK)
 
       - name: Install OWASP ZAP
         run: |
@@ -36,4 +36,4 @@ jobs:
           ZAP_API_KEY: ${{ secrets.ZAP_API_KEY }}
         run: |
           curl -LO https://raw.githubusercontent.com/stevescargall/zap-scan/master/zap-api-scan.py
-          python3 zap-api-scan.py -t https://github.com/<your-repo>/zap-scan-target-url -f openapi -J -H http://localhost:8080
+          python3 zap-api-scan.py -t https://github.com/AntonioCartuche/ApplyingDevOps.git/zap-scan-target-url -f openapi -J -H http://localhost:8080
