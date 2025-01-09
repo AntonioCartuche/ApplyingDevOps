@@ -43,7 +43,7 @@ jobs:
           api_key: ${{ secrets.SOOS_API_KEY }}
           project_name: "ProyectFinalDBP"
           scan_mode: "baseline"
-          target_url: "http://localhost:8000"
+          target_url: "http://127.0.0.1:8000/"
           output_format: "sarif"
 
       # Upload SARIF report to GitHub
