@@ -9,33 +9,36 @@ on:
 jobs:
   soos:
     permissions:
-      security-events: write # for uploading code scanning alert info
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+      security-events: write # Para subir alertas de análisis
+      actions: read # Solo requerido para repositorios privados
     name: SOOS DAST Analysis
     runs-on: ubuntu-latest
     steps:
-      # Checkout the code
-      - name: Checkout repository
+      # Clona el repositorio
+      - name: Checkout code
         uses: actions/checkout@v3
-
-      # Set up Python environment
-      - name: Set up Python
+      
+      # Configura Python (si usas Django u otro framework en Python)
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: 3.10  # Cambia según la versión que uses
 
-      # Install dependencies (adjust as necessary for your project)
+      # Instala dependencias
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # Ajusta según tu archivo de dependencias
 
-      # Start the application (adjust command to match your app's start process)
+      # Inicia la aplicación en segundo plano
       - name: Start the application
         run: |
-          nohup python manage.py runserver 0.0.0.0:8000 &
+          nohup python manage.py runserver 0.0.0.0:8000 &  # Cambia según cómo inicias tu app
 
-      # Run SOOS DAST Analysis
+      # Espera unos segundos para que la aplicación esté completamente activa
+      - name: Wait for application to start
+        run: sleep 10
+
+      # Ejecuta el análisis de SOOS DAST
       - name: Run SOOS DAST Analysis
         uses: soos-io/soos-dast-github-action@v2
         with:
@@ -43,10 +46,10 @@ jobs:
           api_key: ${{ secrets.SOOS_API_KEY }}
           project_name: "ProyectFinalDBP"
           scan_mode: "baseline"
-          target_url: "http://127.0.0.1:8000/"
+          target_url: "http://127.0.0.1:8000"
           output_format: "sarif"
 
-      # Upload SARIF report to GitHub
+      # Sube el reporte generado por SOOS
       - name: Upload SOOS DAST SARIF Report
         uses: github/codeql-action/upload-sarif@v3
         with:
