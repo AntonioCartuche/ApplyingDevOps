@@ -32,7 +32,7 @@ jobs:
       # Inicia la aplicación en segundo plano
       - name: Start the application
         run: |
-          nohup python manage.py runserver 0.0.0.0:8000 &  # Cambia según cómo inicias tu app
+          nohup python manage.py runserver 127.0.0.1:8000 &  # Cambia según cómo inicias tu app
 
       # Espera unos segundos para que la aplicación esté completamente activa
       - name: Wait for application to start
