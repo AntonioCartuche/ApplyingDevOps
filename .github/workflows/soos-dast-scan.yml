@@ -1,24 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-#
-# SOOS is the easy-to-integrate and affordable software security solution for your whole team.
-#
-# Learn more at https://soos.io/
-#
-# To use this action, perform the following steps:
-#
-# 1. Create an account on https://app.soos.io. SOOS offers a free 30 day trial for our SCA, DAST, and SBOM products.
-#
-# 2. Navigate to the "Integrate" page in the SOOS app (https://app.soos.io/integrate/dast/). Note the "API Credentials" section of this page; the keys you will need for the next step are here.
-#
-# 3. Set up your SOOS API Key and SOOS Client Id as Github Secrets named SOOS_API_KEY and SOOS_CLIENT_ID.
-#
-# 4. (Optional) If you'd like to upload SARIF results of DAST scans to GitHub, set SOOS_GITHUB_PAT with your Github Personal Access Token.
-#
-#  Check for the latest version here: https://github.com/marketplace/actions/soos-dast
-
 name: "SOOS DAST Scan"
 
 on:
@@ -35,6 +14,28 @@ jobs:
     name: SOOS DAST Analysis
     runs-on: ubuntu-latest
     steps:
+      # Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # Install dependencies (adjust as necessary for your project)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Start the application (adjust command to match your app's start process)
+      - name: Start the application
+        run: |
+          nohup python manage.py runserver 0.0.0.0:8000 &
+
+      # Run SOOS DAST Analysis
       - name: Run SOOS DAST Analysis
         uses: soos-io/soos-dast-github-action@v2
         with:
@@ -44,6 +45,8 @@ jobs:
           scan_mode: "baseline"
           target_url: "http://localhost:8000"
           output_format: "sarif"
+
+      # Upload SARIF report to GitHub
       - name: Upload SOOS DAST SARIF Report
         uses: github/codeql-action/upload-sarif@v3
         with:
