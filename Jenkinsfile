@@ -10,7 +10,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies...'
                 bat '''
-                    call "C:\Users\Usuario\Desktop\8vo ciclo\Software Security2\UNIDAD 2\entorno\env\Scripts\activate.bat"
+                    call C:\Users\Usuario\Desktop\8vo ciclo\Software Security2\UNIDAD 2\entorno\env\Scripts\activate.bat
                     if exist requirements.txt (
                         pip install -r requirements.txt
                     ) else (
