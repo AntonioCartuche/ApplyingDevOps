@@ -251,7 +251,7 @@ def registrar(request):
     return render(request, 'registrar.html', context)
 
 
-def registe(request):
+def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
