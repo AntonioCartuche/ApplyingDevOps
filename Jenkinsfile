@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        VIRTUAL_ENV = 'C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env'
+        VIRTUAL_ENV = '"C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env"'
         DJANGO_SETTINGS_MODULE = 'ProyectFinalDBP.settings'
         DJANGO_PORT = '8000'
     }
@@ -53,7 +53,7 @@ pipeline {
             echo 'Pipeline execution complete!'
         }
         success {
-            echo 'Pipeline executed successfully! Access your application at http://localhost:8080:%DJANGO_PORT%'
+            echo 'Pipeline executed successfully! Access your application at http://localhost:8080/:%DJANGO_PORT%'
         }
         failure {
             echo 'Pipeline failed, check the logs for more details.'
