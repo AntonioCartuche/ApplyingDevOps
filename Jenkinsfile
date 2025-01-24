@@ -23,9 +23,9 @@ pipeline {
             steps {
                 sshagent(['67ab364c-f4d6-4868-8c56-635f95ee3703']) {
                     sh '''
-                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto
+                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto/ProyectFinalDBP/
                         ssh azureuser@52.254.16.255 <<EOF
-                            cd /home/azureuser/proyecto
+                            cd /home/azureuser/proyecto/ProyectFinalDBP
                             source env/bin/activate
                             python manage.py migrate
                             sudo systemctl restart gunicorn
