@@ -5,6 +5,9 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 sh '''
+                    if [ ! -d "env" ]; then
+                        python3 -m venv env
+                    fi
                     source env/bin/activate
                     pip install -r requirements.txt
                 '''
@@ -23,12 +26,13 @@ pipeline {
             steps {
                 sshagent(['67ab364c-f4d6-4868-8c56-635f95ee3703']) {
                     sh '''
-                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto/ProyectFinalDBP/
+                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto
                         ssh azureuser@52.254.16.255 <<EOF
-                            cd /home/azureuser/proyecto/ProyectFinalDBP
+                            cd /home/azureuser/proyecto/ProyectFinalDBP  # Asegúrate de estar en el directorio correcto
                             source env/bin/activate
+                            pip install -r requirements.txt  # Si el archivo requirements.txt está en esta ruta
                             python manage.py migrate
-                            sudo systemctl restart gunicorn
+                            nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
                         EOF
                     '''
                 }
