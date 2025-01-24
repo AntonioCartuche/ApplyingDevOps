@@ -4,8 +4,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                bat '''
-                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                sh '''
+                    source env/bin/activate
                     pip install -r requirements.txt
                 '''
             }
@@ -13,8 +13,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                bat '''
-                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                sh '''
+                    source env/bin/activate
                     python manage.py test
                 '''
             }
@@ -28,7 +28,7 @@ pipeline {
                             cd /home/azureuser/proyecto
                             source env/bin/activate
                             python manage.py migrate
-                            nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
+                            sudo systemctl restart gunicorn
                         EOF
                     '''
                 }
