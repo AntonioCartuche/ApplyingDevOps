@@ -28,9 +28,9 @@ pipeline {
                     sh '''
                         scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto
                         ssh azureuser@52.254.16.255 <<EOF
-                            cd /home/azureuser/proyecto/ProyectFinalDBP  # Asegúrate de estar en el directorio correcto
+                            cd /home/azureuser/proyecto/ProyectFinalDBP
                             source env/bin/activate
-                            pip install -r requirements.txt  # Si el archivo requirements.txt está en esta ruta
+                            pip install -r requirements.txt
                             python manage.py migrate
                             nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
                         EOF
