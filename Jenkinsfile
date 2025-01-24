@@ -1,62 +1,38 @@
 pipeline {
     agent any
-    environment {
-        VIRTUAL_ENV = '"C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env"'
-        DJANGO_SETTINGS_MODULE = 'ProyectFinalDBP.settings'
-        DJANGO_PORT = '8000'
-    }
     stages {
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                echo 'Installing dependencies...'
+                echo 'Building the application...'
                 bat '''
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
-                    if exist requirements.txt (
-                        pip install -r requirements.txt
-                    ) else (
-                        echo No requirements.txt found, skipping dependency installation
-                    )
+                    pip install -r requirements.txt
                 '''
             }
         }
-        stage('Run Tests') {
+        stage('Test') {
             steps {
                 echo 'Running tests...'
                 bat '''
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
-                    python --version
-                    if exist manage.py (
-                        python manage.py test
-                    ) else (
-                        echo No manage.py found, skipping tests
-                    )
+                    python manage.py test
                 '''
             }
         }
-        stage('Deploy Locally') {
+        stage('Deploy') {
             steps {
-                echo 'Deploying locally...'
-                bat '''
-                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
-                    if exist manage.py (
-                        python manage.py migrate
-                        python manage.py runserver 0.0.0.0:%DJANGO_PORT%
-                    ) else (
-                        echo No manage.py found, skipping deployment
-                    )
-                '''
+                sshagent(['67ab364c-f4d6-4868-8c56-635f95ee3703']) {
+                    sh '''
+                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto
+                        ssh azureuser@52.254.16.255 <<EOF
+                            cd /home/azureuser/proyecto
+                            source env/bin/activate
+                            python manage.py migrate
+                            nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
+                        EOF
+                    '''
+                }
             }
-        }
-    }
-    post {
-        always {
-            echo 'Pipeline execution complete!'
-        }
-        success {
-            echo 'Pipeline executed successfully! Access your application at http://localhost:8080/:%DJANGO_PORT%'
-        }
-        failure {
-            echo 'Pipeline failed, check the logs for more details.'
         }
     }
 }
