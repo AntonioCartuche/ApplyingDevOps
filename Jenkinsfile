@@ -5,9 +5,12 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 sh '''
+                    # Comprobamos si el entorno virtual no existe y lo creamos
                     if [ ! -d "env" ]; then
                         python3 -m venv env
                     fi
+
+                    # Activamos el entorno virtual y luego instalamos las dependencias
                     source env/bin/activate
                     pip install -r /home/azureuser/proyecto/ProyectFinalDBP/requirements.txt
                 '''
