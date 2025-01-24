@@ -9,7 +9,7 @@ pipeline {
                         python3 -m venv env
                     fi
                     source env/bin/activate
-                    pip install -r requirements.txt
+                    pip install -r /home/azureuser/proyecto/ProyectFinalDBP/requirements.txt
                 '''
             }
         }
@@ -18,7 +18,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     source env/bin/activate
-                    python manage.py test
+                    python /home/azureuser/proyecto/ProyectFinalDBP/manage.py test
                 '''
             }
         }
@@ -30,8 +30,8 @@ pipeline {
                         ssh azureuser@52.254.16.255 <<EOF
                             cd /home/azureuser/proyecto/ProyectFinalDBP
                             source env/bin/activate
-                            pip install -r requirements.txt
-                            python manage.py migrate
+                            pip install -r /home/azureuser/proyecto/ProyectFinalDBP/requirements.txt
+                            python /home/azureuser/proyecto/ProyectFinalDBP/manage.py migrate
                             nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
                         EOF
                     '''
