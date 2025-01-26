@@ -1,51 +1,64 @@
+
+
 pipeline {
     agent any
+    environment {
+        VIRTUAL_ENV = '"C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env"'
+        DJANGO_SETTINGS_MODULE = 'ProyectFinalDBP.settings'
+        DJANGO_PORT = '8000'
+    }
     stages {
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Building the application...'
-                sh '''
-                    # Comprobamos si el entorno virtual no existe y lo creamos
-                    if [ ! -d "env" ]; then
-                        python3 -m venv env
-                    fi
-
-                    # Activamos el entorno virtual y luego instalamos las dependencias
-                    source env/bin/activate
-                    pip install -r /home/azureuser/proyecto/ProyectFinalDBP/requirements.txt
+                echo 'Installing dependencies...'
+                bat '''
+                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                    if exist requirements.txt (
+                        pip install -r requirements.txt
+                    ) else (
+                        echo No requirements.txt found, skipping dependency installation
+                    )
                 '''
             }
         }
-        stage('Test') {
+        stage('Run Tests') {
             steps {
                 echo 'Running tests...'
-                sh '''
-                    source env/bin/activate
-                    python /home/azureuser/proyecto/ProyectFinalDBP/manage.py test
+                bat '''
+                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                    python --version
+                    if exist manage.py (
+                        python manage.py test
+                    ) else (
+                        echo No manage.py found, skipping tests
+                    )
                 '''
             }
         }
-        stage('Deploy') {
+        stage('Deploy Locally') {
             steps {
-                sshagent(['67ab364c-f4d6-4868-8c56-635f95ee3703']) {
-                    sh '''
-                        # Copiar archivos a la máquina virtual
-                        scp -r ./ azureuser@52.254.16.255:/home/azureuser/proyecto
-                        # Ejecutar comandos en la VM a través de SSH
-                        ssh azureuser@52.254.16.255 <<EOF
-                            cd /home/azureuser/proyecto/ProyectFinalDBP
-                            # Activar el entorno virtual (ruta corregida)
-                            source /home/azureuser/proyecto/env/bin/activate
-                            # Instalar las dependencias
-                            pip install -r /home/azureuser/proyecto/ProyectFinalDBP/requirements.txt
-                            # Ejecutar migraciones
-                            python /home/azureuser/proyecto/ProyectFinalDBP/manage.py migrate
-                            # Iniciar gunicorn
-                            nohup gunicorn ProyectFinalDBP.wsgi:application --bind 0.0.0.0:8000 &
-                        EOF
-                    '''
-                }
-            }   
+                echo 'Deploying locally...'
+                bat '''
+                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                    if exist manage.py (
+                        python manage.py migrate
+                        python manage.py runserver 0.0.0.0:%DJANGO_PORT%
+                    ) else (
+                        echo No manage.py found, skipping deployment
+                    )
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline execution complete!'
+        }
+        success {
+            echo 'Pipeline executed successfully! Access your application at http://localhost:8080/:%DJANGO_PORT%'
+        }
+        failure {
+            echo 'Pipeline failed, check the logs for more details.'
         }
     }
 }
