@@ -36,6 +36,7 @@ pipeline {
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
                     pip install bandit
                     bandit -r .
+                    bandit -r . --exclude env
                 '''
             }
         }
