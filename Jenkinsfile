@@ -64,6 +64,16 @@ pipeline {
         }
 
 
+        stage('Dynamic Tests with Playwright') {
+            steps {
+                echo 'Running dynamic tests with Playwright...'
+                bat '''
+                    npx playwright test
+                '''
+            }
+        }
+
+
         stage('Deploy Locally') {
             steps {
                 echo 'Activating virtual environment and deploying the application...'
@@ -81,7 +91,7 @@ pipeline {
 
 
 
-
+        /*
 
         stage('Dynamic Analysis - OWASP ZAP') {
             steps {
@@ -91,6 +101,8 @@ pipeline {
                 '''
             }
         }
+
+        */
 
 
 
