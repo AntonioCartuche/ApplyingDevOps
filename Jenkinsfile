@@ -84,8 +84,6 @@ pipeline {
             }
         }
         */
-
-
         stage('Deploy Locally') {
             steps {
                 echo 'Activating virtual environment and deploying the application...'
@@ -98,10 +96,6 @@ pipeline {
                 '''
             }
         }
-
-        
-
-
 
         /*
 
