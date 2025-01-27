@@ -54,6 +54,15 @@ pipeline {
             }
         }
 
+        stage('Dynamic Analysis - Nikto') {
+            steps {
+                echo 'Running dynamic security tests with Nikto...'
+                bat '''
+                    nikto -h http://localhost:8000
+                '''
+            }
+        }
+
 
         stage('Deploy Locally') {
             steps {
