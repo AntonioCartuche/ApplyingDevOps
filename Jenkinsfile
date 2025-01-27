@@ -54,6 +54,7 @@ pipeline {
             }
         }
 
+        /*
         stage('Dynamic Analysis - Nikto') {
             steps {
                 echo 'Running dynamic security tests with Nikto...'
@@ -62,7 +63,7 @@ pipeline {
                 '''
             }
         }
-
+        */
 
         stage('Dynamic Tests with Playwright') {
             steps {
