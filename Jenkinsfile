@@ -58,7 +58,7 @@ pipeline {
             steps {
                 echo 'Running dynamic security tests with OWASP ZAP...'
                 bat '''
-                    docker run -d -u zap -p 8080:8080 owasp/zap2docker-stable zap-baseline.py -t http://localhost:8000
+                    zap-baseline.py -t http://localhost:8000
                 '''
             }
         }
