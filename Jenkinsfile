@@ -61,6 +61,7 @@ pipeline {
                 bat '''
                     call "C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env\\Scripts\\activate.bat"
                     cd "C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\ProyectFinalDBP"
+                    dir
                     python manage.py migrate
                     python manage.py runserver 
                 '''
