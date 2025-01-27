@@ -58,7 +58,7 @@ pipeline {
             steps {
                 echo 'Running dynamic security tests with OWASP ZAP...'
                 bat '''
-                    "C:\\Program Files\\OWASP ZAP\\zap-baseline.py" -t http://localhost:8000
+                    "C:\\Users\\Usuario\\Desktop\\zap\\ZAP_2_15_0_windows.exe" -daemon -quickurl http://localhost:8000 -quickout zap_report.html
                 '''
             }
         }
