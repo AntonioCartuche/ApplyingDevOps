@@ -65,6 +65,8 @@ pipeline {
         }
         */
 
+        /*
+
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies...'
@@ -81,6 +83,7 @@ pipeline {
                 '''
             }
         }
+        */
 
 
         stage('Deploy Locally') {
