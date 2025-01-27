@@ -1,5 +1,3 @@
-
-
 pipeline {
     agent any
     environment {
@@ -18,6 +16,26 @@ pipeline {
                     ) else (
                         echo No requirements.txt found, skipping dependency installation
                     )
+                '''
+            }
+        }
+        stage('Dependency Analysis') {
+            steps {
+                echo 'Checking for vulnerabilities in dependencies...'
+                bat '''
+                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                    pip install safety
+                    safety check -r requirements.txt
+                '''
+            }
+        }
+        stage('Static Code Analysis') {
+            steps {
+                echo 'Analyzing code for security vulnerabilities...'
+                bat '''
+                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
+                    pip install bandit
+                    bandit -r .
                 '''
             }
         }
