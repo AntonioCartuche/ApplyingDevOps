@@ -65,6 +65,14 @@ pipeline {
         }
         */
 
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+                bat '''
+                    npm install
+                '''
+            }
+}
         stage('Dynamic Tests with Playwright') {
             steps {
                 echo 'Running dynamic tests with Playwright...'
