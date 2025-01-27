@@ -72,7 +72,7 @@ pipeline {
                     npm install
                 '''
             }
-}
+        }
         stage('Dynamic Tests with Playwright') {
             steps {
                 echo 'Running dynamic tests with Playwright...'
