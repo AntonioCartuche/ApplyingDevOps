@@ -36,7 +36,14 @@ pipeline {
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
                     pip install bandit
                    
-                    bandit -r . --exclude env
+                    bandit -r . --exclude env -f json -o bandit-report.json
+                    publishHTML(target: [
+                        reportName: 'Bandit Report',
+                        reportDir: '.',
+                        reportFiles: 'bandit-report.json'
+                    ])
+
+                    
                 '''
             }
         }
