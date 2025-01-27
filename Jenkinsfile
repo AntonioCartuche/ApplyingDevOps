@@ -34,15 +34,8 @@ pipeline {
                 echo 'Analyzing code for security vulnerabilities...'
                 bat '''
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
-                    pip install bandit
-
-                    try {
-                        'bandit -r . --exclude env'
-                    } catch (Exception e) {
-                        echo 'Bandit encontró problemas, pero continuamos con el pipeline.'
-                    }
-                   
-                    
+                    pip install bandit                   
+                    bandit -r . --exclude env --exit-zero
                 '''
             }
         }
