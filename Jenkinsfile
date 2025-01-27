@@ -54,23 +54,23 @@ pipeline {
             }
         }
 
-        
-
 
         stage('Deploy Locally') {
             steps {
-                echo 'Deploying locally...'
+                echo 'Activating virtual environment and deploying the application...'
                 bat '''
-                    call %VIRTUAL_ENV%\\Scripts\\activate.bat
-                    if exist manage.py (
-                        python manage.py migrate
-                        python manage.py runserver
-                    ) else (
-                        echo No manage.py found, skipping deployment
-                    )
+                    call "C:\\Users\\Usuario\\Desktop\\8vo ciclo\\Software Security2\\UNIDAD 2\\entorno\\env\\Scripts\\activate.bat"
+                    cd "C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\test deploy@2\\ProyectFinalDBP"
+                    python manage.py migrate
+                    python manage.py runserver 
                 '''
             }
         }
+
+        
+
+
+
 
 
         stage('Dynamic Analysis - OWASP ZAP') {
