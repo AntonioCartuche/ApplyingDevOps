@@ -60,7 +60,7 @@ pipeline {
                     call %VIRTUAL_ENV%\\Scripts\\activate.bat
                     if exist manage.py (
                         python manage.py migrate
-                        python manage.py runserver 0.0.0.0:%DJANGO_PORT%
+                        python manage.py runserver
                     ) else (
                         echo No manage.py found, skipping deployment
                     )

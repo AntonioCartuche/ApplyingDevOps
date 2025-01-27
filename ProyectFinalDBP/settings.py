@@ -137,7 +137,7 @@ STRIPE_PRIVATE_KEY = 'sk_test_51KVzWjCoJ9ZBxLROdijHJEdnwZ2ENSsWKhEzSshMfnd8AbR0R
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'jose.cartuche.r@unl.edu.ec' 
-EMAIL_HOST_PASSWORD = 'An2@gmail'
+EMAIL_HOST_PASSWORD = '12456789'
 EMAIL_USE_TLS = True
 
 # Default primary key field type
